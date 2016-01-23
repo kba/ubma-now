@@ -1,0 +1,27 @@
+{
+  "name": "now",
+  "version": "0.0.1",
+  "description": "Opening Hours calculcator",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "coffee src/test/test-*"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@gitlab.com/kba/now.git"
+  },
+  "author": "Konstantin baierer",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://gitlab.com/kba/now/issues"
+  },
+  "homepage": "https://gitlab.com/kba/now#README",
+  "dependencies": {
+    "js-yaml": "^3.5.2",
+    "moment": "^2.11.1",
+    "moment-range": "^2.1.0"
+  },
+  "devDependencies": {
+    "tape": "^4.4.0"
+  }
+}
