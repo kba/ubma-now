@@ -39,7 +39,8 @@ module.exports = class NamedDayRange extends DateRange
 		if name and name not of CONFIG.NAMED_DAYS[prefix]
 			return false
 		unless DateRange.matchString CONFIG.NAMED_DAYS[prefix][name]
-			throw new Error("Invalid date range for #{prefix}:#{name} : '#{CONFIG.NAMED_DAYS[prefix][name]}'")
+			throw new Error("Invalid date range for #{prefix}:#{name} :" +
+				"'#{CONFIG.NAMED_DAYS[prefix][name]}'")
 		return true
 	@parse: (str) ->
 		[prefix, name] = str.match(NAMED_DAY_REGEX).slice(1)

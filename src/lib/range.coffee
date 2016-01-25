@@ -15,9 +15,11 @@ Range.matchString = (range) ->
 		if Range[type].matchString(range)
 			return type
 
+Range.matchStrings = (ranges) -> ranges.split(/\s*,\s*/).map Range.matchString
+
 Range.parseRange = (range) ->
 	range = range.toLowerCase().trim()
-	type = Rane.matchString(range)
+	type = Range.matchString(range)
 	if type
 		return Range[type].parse(range)
 	throw new Error("Could not determine range type for '#{range}'")

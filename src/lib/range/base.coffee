@@ -4,5 +4,6 @@ module.exports = class BaseRange
 		excludeMethods or= []
 		@_range = Moment.range(from, to)
 		@[k] = v for k,v of @_range when k not in excludeMethods
-	contains: -> throw new Error("'contains' not implemented")
-	iterate: -> throw new Error("'iterate' not implemented")
+	contains: -> throw new Error("'contains' not implemented for '#{@constructor.name}'")
+	iterate:  -> throw new Error("'iterate' not implemented for '#{@constructor.name}'")
+	toString: -> throw new Error("'toString' not implemented for '#{@constructor.name}'")

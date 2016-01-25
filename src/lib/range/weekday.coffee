@@ -1,8 +1,8 @@
 Moment = require 'moment'
-MomentRange = require 'moment-range'
+BaseRange = require './base'
 CONFIG = require '../config'
 
-module.exports = class WeekdayRange extends MomentRange
+module.exports = class WeekdayRange extends BaseRange
 	constructor: (@weekdays=[]) ->
 	contains : (day) -> return WeekdayRange.parseWeekday(day) in @weekdays
 	@parseWeekday: (weekday) ->
@@ -14,6 +14,8 @@ module.exports = class WeekdayRange extends MomentRange
 			return weekday.day()
 	@matchString: (str) ->
 		str.split(/\s*-\s*/).every (v) -> v of CONFIG.WEEKDAY_MAP
+	toString: -> @weekdays.map(
+		(number) -> Moment.localeData().weekdaysMin(Moment(number, 'e'))).join(',')
 	@parse: (str) ->
 		tokens = []
 		str = str.toLowerCase()

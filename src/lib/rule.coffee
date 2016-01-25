@@ -17,13 +17,13 @@ _cloneArray = (arr, vals...) ->
 	clone.push v for v in vals when v
 	return clone
 
-_scrapeData = (obj) ->
+_scrapeData = (obj, options) ->
 	if typeof obj is 'object'
 		if Util.isArray obj
 			arr = []
 			data = []
 			for v in obj
-				if Range.matchString(v)
+				if Range.matchStrings(v)
 					arr.push v
 				else
 					data.push v
@@ -31,29 +31,30 @@ _scrapeData = (obj) ->
 		else
 			data = {}
 			Object.keys(obj).forEach (name) ->
-				unless Range.matchString(name)
+				unless Range.matchStrings(name)
 					data[name] = obj[name]
 					delete obj[name]
 			if Object.keys(data).length
 				return [obj, data]
 			return [obj]
 	else
-		if Range.matchString(obj)
-			return [obj, true]
+		if Range.matchStrings(obj)
+			return [obj, options.terminal]
 		else
 			return [null, obj]
 
-_parseRuleTree = (obj, parents, rules) ->
-	[obj, data] = _scrapeData obj
+_parseRuleTree = (obj, parents, rules, options) ->
+	[obj, data] = _scrapeData obj, options
 	unless obj
 		return rules.push {ranges: _cloneArray(parents), data: data}
 	if typeof obj is 'object'
 		if Util.isArray obj
-			rules.push {ranges: _cloneArray(parents, v), data: true} for v in obj
+			# rules.push {ranges: _cloneArray(parents, v), data: true} for v in obj
+			_parseRuleTree(v, _cloneArray(parents), rules, options) for v in obj
 			return
 		else
 			for name,child of obj
-				_parseRuleTree(child, _cloneArray(parents, name), rules)
+				_parseRuleTree(child, _cloneArray(parents, name), rules, options)
 			if data
 				return rules.push {ranges:_cloneArray(parents, name), data: data}
 	else
@@ -61,8 +62,22 @@ _parseRuleTree = (obj, parents, rules) ->
 	return rules
 
 
-Rule.parseRuleTree = (obj) ->
-	return _parseRuleTree(obj, [], [])
+Rule.parseRuleTree = (obj, options={}) ->
+	options.terminal or= true
+	andRules = _parseRuleTree(obj, [], [], options)
+	rules = andRules.map (andRule) -> [
+		'and',
+		andRule.ranges.map (ranges) -> ['or', ranges.split(/\s*,\s*/)]
+		andRule.data
+	]
+	rules.map (andRule) ->
+		andRule[1] = andRule[1].map (orRule) ->
+			if orRule[1].length > 1
+				Rule.makeRule.apply(Rule, orRule)
+			else
+				console.log orRule[1][0]
+				Range.parseRange(orRule[1][0])
+		Rule.makeRule.apply(Rule, andRule)
 
 ###
 '2015-01-01 - 2015-12-31':
