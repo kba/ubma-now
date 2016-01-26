@@ -54,7 +54,7 @@ module.exports = class DateRange extends BaseRange
 			)
 	iterate : (opts={}, cb) ->
 		opts.by or= 'days'
-		opts.maxIterations or= 10
+		opts.maxIterations or= 100
 		opts.offset or= Moment(@start)
 		start = opts.offset
 		cur = Moment(@start)
