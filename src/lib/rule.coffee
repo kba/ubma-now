@@ -9,6 +9,14 @@ Rule.makeRule = (ruleType, ranges, data) ->
 	ruleType = ruleType.toLowerCase()
 	if ruleType not in RULE_TYPES
 		throw new Error("No such rule type '#{ruleType}'. Must be one of [#{RULE_TYPES}]")
+	if typeof ranges == 'string'
+		ranges = Range.parseRanges(ranges)
+	ranges = ranges.map (range) ->
+		if typeof range == 'string'
+			range = Range.parseRange(range)
+		return range
+	if ranges.length == 1
+		return ranges[0]
 	return new Rule[ruleType](ranges, data)
 
 _cloneArray = (arr, vals...) ->

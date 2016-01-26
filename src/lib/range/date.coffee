@@ -33,10 +33,8 @@ module.exports = class DateRange extends BaseRange
 		@repeat or= 'daily'
 	toString : ->
 		[from,to] = [@_range.start, @_range.end].map((date) -> date.format('YYYY-MM-DD'))
-		if from == to
-			return from
-		else
-			return [from,to].join(" #{@repeat} ")
+		return from if from == to
+		return [from,to].join(" #{@repeat} ")
 	contains: (date) ->
 		date = DateRange.parseDate(date)
 		return unless @_range.contains(date)
@@ -53,6 +51,27 @@ module.exports = class DateRange extends BaseRange
 				@_range.start.date() == date.date() and
 				@_range.start.month() == date.month()
 			)
+	iterate: (opts={}, cb) ->
+		opts.by or= 'days'
+		opts.maxIterations or= 10
+		opts.offset or= @_range.start
+		start = Moment(@_range.start)
+		cur = Moment(@_range.start)
+		i = 0
+		while (true)
+			break if opts.maxIterations and i++ >= opts.maxIterations
+			cb(cur)
+			cur.add(1, opts.by)
+			# TODO
+			unless @contains(cur)
+				if @repeat is 'weekly' then cur = Moment(start).add(7, 'days')
+				else if @repeat is 'bi-weekly' then cur = Moment(start).add(14, 'days')
+				else if @repeat is 'monthly' then cur = Moment(start).add(1, 'months')
+				else if @repeat is 'yearly' then cur = Moment(start).add(1, 'year')
+				else if @repeat is 'daily' then null
+				else throw new Error("Unsupported iteration: #{@repeat}")
+				start = Moment(cur)
+			break unless @contains(cur)
 	@parseDate: (date) ->
 		if typeof date is 'string'
 			return Moment(date, 'YYYY-MM-DD')

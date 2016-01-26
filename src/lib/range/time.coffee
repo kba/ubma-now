@@ -2,6 +2,8 @@ BaseRange = require './base'
 Moment = require 'moment'
 MomentRange = require 'moment-range'
 
+log = require('easylog')(module)
+
 TIME_REGEX = /\d{1,2}:\d{2}/
 TIME_RANGE_REGEX = ///
 	^
@@ -23,7 +25,7 @@ module.exports = class TimeRange extends BaseRange
 	contains : (date) ->
 		date = TimeRange.parseTime(date)
 		return unless date
-		if @_range.contains Moment(@).hour(date.hour()).minute(date.minute())
+		if @_range.contains Moment(@_range.start).hour(date.hour()).minute(date.minute())
 			return true
 	@parseTime: (time) ->
 		if typeof time is 'string'
