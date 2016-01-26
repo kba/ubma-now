@@ -1,10 +1,9 @@
 module.exports = class Hours
 
-	constructor: (@validRange, @timeRules) ->
+	constructor : (@validRange, @timeRules) ->
 
-	forDate: (date) ->
+	forDate : (date) ->
 		unless @dateRange.contains(date)
 			return 'MEEEP'
 
 	forDateTime : (dateTime) ->
-

@@ -54,19 +54,19 @@ _scrapeData = (obj, options) ->
 _parseRuleTree = (obj, parents, rules, options) ->
 	[obj, data] = _scrapeData obj, options
 	unless obj
-		return rules.push {ranges: _cloneArray(parents), data: data}
+		return rules.push {ranges : _cloneArray(parents), data : data}
 	if typeof obj is 'object'
 		if Util.isArray obj
-			# rules.push {ranges: _cloneArray(parents, v), data: true} for v in obj
+			# rules.push {ranges : _cloneArray(parents, v), data : true} for v in obj
 			_parseRuleTree(v, _cloneArray(parents), rules, options) for v in obj
 			return
 		else
 			for name,child of obj
 				_parseRuleTree(child, _cloneArray(parents, name), rules, options)
 			if data
-				return rules.push {ranges:_cloneArray(parents, name), data: data}
+				return rules.push {ranges : _cloneArray(parents, name), data : data}
 	else
-		return rules.push {ranges: _cloneArray(parents, obj), data: data}
+		return rules.push {ranges : _cloneArray(parents, obj), data : data}
 	return rules
 
 

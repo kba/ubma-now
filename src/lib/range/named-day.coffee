@@ -23,14 +23,14 @@ NAMED_DAY_REGEX = ///
 ///
 
 module.exports = class NamedDayRange extends DateRange
-	constructor: (from, to, repeat, @prefix, @name) ->
+	constructor : (from, to, repeat, @prefix, @name) ->
 		super
 	toString : ->
 		tokens = []
 		tokens.push @prefix
 		tokens.push @name
 		return tokens.join(':')
-	@matchString: (str) ->
+	@matchString : (str) ->
 		return unless NAMED_DAY_REGEX.test(str)
 		[prefix, name] = str.match(NAMED_DAY_REGEX).slice(1)
 		if prefix and prefix not of CONFIG.NAMED_DAYS
@@ -42,7 +42,7 @@ module.exports = class NamedDayRange extends DateRange
 			throw new Error("Invalid date range for #{prefix}:#{name} :" +
 				"'#{CONFIG.NAMED_DAYS[prefix][name]}'")
 		return true
-	@parse: (str) ->
+	@parse : (str) ->
 		[prefix, name] = str.match(NAMED_DAY_REGEX).slice(1)
 		prefix or= CONFIG.DEFAULT_NAMED_DAYS
 		range = CONFIG.NAMED_DAYS[prefix][name]
@@ -54,6 +54,3 @@ module.exports = class NamedDayRange extends DateRange
 			prefix
 			name
 		)
-
-
-

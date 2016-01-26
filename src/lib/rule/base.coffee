@@ -2,9 +2,9 @@ Range = require '../range'
 
 module.exports = class BaseRule
 
-	constructor: (@ranges, @data) ->
+	constructor : (@ranges, @data) ->
 
-	toString: ->
+	toString : ->
 		op = @constructor.name.replace('Rule', '').toUpperCase()
 		@ranges.map((range) ->
 			"(#{range.toString()})"

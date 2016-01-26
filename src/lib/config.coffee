@@ -10,13 +10,13 @@ for locale in ['en', 'de']
 
 DEFAULT_NAMED_DAYS = 'holidays-de-bw'
 NAMED_DAYS = {
-	"#{DEFAULT_NAMED_DAYS}":
-		'Heiligabend': '2000-12-24 yearly'
-		'1. Weihnachtsfeiertag': '2000-12-25 yearly'
-		'2. Weihnachtsfeiertag': '2000-12-26 yearly'
-		'Silvester': '2000-12-31 yearly'
-		'Neujahr': '2000-01-01 yearly'
-		'Tag der Arbeit': '2000-05-01 yearly'
+	"#{DEFAULT_NAMED_DAYS}" :
+		'Heiligabend' : '2000-12-24 yearly'
+		'1. Weihnachtsfeiertag' : '2000-12-25 yearly'
+		'2. Weihnachtsfeiertag' : '2000-12-26 yearly'
+		'Silvester' : '2000-12-31 yearly'
+		'Neujahr' : '2000-01-01 yearly'
+		'Tag der Arbeit' : '2000-05-01 yearly'
 }
 
 module.exports = {

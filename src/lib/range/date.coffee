@@ -28,14 +28,14 @@ DATE_RANGE_REGEX = ///
 ///
 
 module.exports = class DateRange extends BaseRange
-	constructor: (from, to, @repeat) ->
+	constructor : (from, to, @repeat) ->
 		@inheritMomentRange(from, to, ['contains', 'toString'])
 		@repeat or= 'daily'
 	toString : ->
 		[from,to] = [@_range.start, @_range.end].map((date) -> date.format('YYYY-MM-DD'))
 		return from if from == to
 		return [from,to].join(" #{@repeat} ")
-	contains: (date) ->
+	contains : (date) ->
 		date = DateRange.parseDate(date)
 		return unless @_range.contains(date)
 		return true if @repeat is 'daily'
@@ -51,7 +51,7 @@ module.exports = class DateRange extends BaseRange
 				@_range.start.date() == date.date() and
 				@_range.start.month() == date.month()
 			)
-	iterate: (opts={}, cb) ->
+	iterate : (opts={}, cb) ->
 		opts.by or= 'days'
 		opts.maxIterations or= 10
 		opts.offset or= @_range.start
@@ -72,13 +72,13 @@ module.exports = class DateRange extends BaseRange
 				else throw new Error("Unsupported iteration: #{@repeat}")
 				start = Moment(cur)
 			break unless @contains(cur)
-	@parseDate: (date) ->
+	@parseDate : (date) ->
 		if typeof date is 'string'
 			return Moment(date, 'YYYY-MM-DD')
 		if date instanceof Moment
 			return date
-	@matchString: (str) -> DATE_RANGE_REGEX.test(str)
-	@parse: (range) ->
+	@matchString : (str) -> DATE_RANGE_REGEX.test(str)
+	@parse : (range) ->
 		[from, repeat, to] = range.match(DATE_RANGE_REGEX).slice(1)
 		from = DateRange.parseDate(from).hour(0).minute(0).second(0)
 		unless repeat
@@ -88,5 +88,3 @@ module.exports = class DateRange extends BaseRange
 		if to
 			to = DateRange.parseDate to
 		return new DateRange(from, to, repeat)
-
-

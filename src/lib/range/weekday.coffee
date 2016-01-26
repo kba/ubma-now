@@ -3,20 +3,20 @@ BaseRange = require './base'
 CONFIG = require '../config'
 
 module.exports = class WeekdayRange extends BaseRange
-	constructor: (@weekdays=[]) ->
+	constructor : (@weekdays=[]) ->
 	contains : (day) -> return WeekdayRange.parseWeekday(day) in @weekdays
-	@parseWeekday: (weekday) ->
+	@parseWeekday : (weekday) ->
 		if typeof weekday is 'string'
 			return CONFIG.WEEKDAY_MAP[weekday.toLowerCase()]
 		if typeof weekday is 'number'
 			return weekday if weekday in [0 .. 7]
 		if weekday instanceof Moment
 			return weekday.day()
-	@matchString: (str) ->
+	@matchString : (str) ->
 		str.split(/\s*-\s*/).every (v) -> v of CONFIG.WEEKDAY_MAP
-	toString: -> @weekdays.map(
+	toString : -> @weekdays.map(
 		(number) -> Moment.localeData().weekdaysMin(Moment(number, 'e'))).join(',')
-	@parse: (str) ->
+	@parse : (str) ->
 		tokens = []
 		str = str.toLowerCase()
 		range = str.split('-', 2).map (day) -> WeekdayRange.parseWeekday(day)
