@@ -1,5 +1,7 @@
 module.exports = class CatchallRange
-	contains : -> true
+	containsDate : -> true
+	containsTime : -> true
+	containsDateTime : -> true
 	@matchString : (str) -> str == '*'
 	@parse : -> new CatchallRange()
 	toString : -> '*'

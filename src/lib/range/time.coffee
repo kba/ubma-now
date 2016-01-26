@@ -21,11 +21,19 @@ module.exports = class TimeRange extends BaseRange
 	constructor : (from, to, repeat) ->
 		@inheritMomentRange(from, to, ['contains', 'toString'])
 	toString : ->
-		return [@_range.start, @_range.end].map((date) -> date.format('HH:mm')).join(' - ')
-	contains : (date) ->
+		return [@start, @end].map((date) -> date.format('HH:mm')).join(' - ')
+	onDate : (date) ->
+		date = TimeRange.parseTime(date)
+		return Moment.range(
+			Moment(date).hour(@start.hour()).minute(@start.minute())
+			Moment(date).hour(@end.hour()).minute(@end.minute())
+		)
+	containsDate : -> true
+	containsTime : (date) ->
 		date = TimeRange.parseTime(date)
 		return unless date
-		if @_range.contains Moment(@_range.start).hour(date.hour()).minute(date.minute())
+		range = @onDate(date)
+		if range.contains(date)
 			return true
 	@parseTime : (time) ->
 		if typeof time is 'string'

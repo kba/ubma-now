@@ -4,7 +4,8 @@ CONFIG = require '../config'
 
 module.exports = class WeekdayRange extends BaseRange
 	constructor : (@weekdays=[]) ->
-	contains : (day) -> return WeekdayRange.parseWeekday(day) in @weekdays
+	containsTime : -> true
+	containsDate : (day) -> return WeekdayRange.parseWeekday(day) in @weekdays
 	@parseWeekday : (weekday) ->
 		if typeof weekday is 'string'
 			return CONFIG.WEEKDAY_MAP[weekday.toLowerCase()]

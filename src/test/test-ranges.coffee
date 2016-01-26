@@ -8,7 +8,7 @@ testRange = (t, type, yesno, range, contained) ->
 	parseFn = Range[type]["parse#{type}"]
 	_contained = if parseFn then parseFn.call(Range[type], contained) else contained
 	_range = parseRangeFn.call(Range[type], range)
-	t[yesno].call t, _range.contains(_contained),
+	t[yesno].call t, _range.containsDateTime(_contained),
 		"#{type}Range: '#{contained}' #{if yesno is 'notOk' then 'not in' else 'in'} '#{range}'" 
 	return _range
 
@@ -74,10 +74,21 @@ Test 'parseRanges', (t) ->
 	t.ok Range.parseRanges('08:10-09:30,Mo')
 	t.end()
 
-Test 'iterate', (t) ->
+Test.skip 'iterate 1', (t) ->
 	range = testRange t, 'Date', 'ok', '2000-01-01 weekly 2012-02-23', '2005-01-01'
 	max = 5
 	i = 0
 	range.iterate {by:'month'}, (date) ->
 		console.log date.toString()
+	t.end()
+
+Test 'iterate time', (t) ->
+	timeRange = Range.Time.parse('08:00-16:00')
+	onDate = timeRange.onDate(Range.Date.parseDate('2015-01-01'))
+	onDate.by 'hours', (date) ->
+		console.log date.toString()
+	# max = 5
+	# i = 0
+	# range.iterate {by:'month'}, (date) ->
+	#     console.log date.toString()
 	t.end()
