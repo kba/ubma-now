@@ -43,6 +43,8 @@ module.exports = class BaseRule
 
 	toString : ->
 		op = @constructor.name.replace('Rule', '').toUpperCase()
-		@ranges.map((range) ->
+		ret = @ranges.map((range) ->
 			"(#{range.toString()})"
 		).join(" #{op} ")
+		ret += " => #{JSON.stringify @data}" if @data
+		return ret

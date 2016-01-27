@@ -1,7 +1,10 @@
 Range = require './range'
 Util = require 'util'
 
+log = require('easylog')(module)
+
 RULE_TYPES = ['and', 'or', 'xor']
+
 Rule = module.exports = {}
 Rule[ruleType] = require "./rule/#{ruleType}" for ruleType in RULE_TYPES
 
@@ -15,8 +18,6 @@ Rule.makeRule = (ruleType, ranges, data) ->
 		if typeof range == 'string'
 			range = Range.parseRange(range)
 		return range
-	if ranges.length == 1
-		return ranges[0]
 	return new Rule[ruleType](ranges, data)
 
 _cloneArray = (arr, vals...) ->
@@ -38,12 +39,13 @@ _scrapeData = (obj, options) ->
 			return [arr, data]
 		else
 			data = {}
+			log.info [obj, data]
 			Object.keys(obj).forEach (name) ->
 				unless Range.matchStrings(name)
 					data[name] = obj[name]
 					delete obj[name]
-			if Object.keys(data).length
-				return [obj, data]
+			obj = null unless Object.keys(obj).length
+			return [obj, data] if Object.keys(data).length
 			return [obj]
 	else
 		if Range.matchStrings(obj)
@@ -52,8 +54,11 @@ _scrapeData = (obj, options) ->
 			return [null, obj]
 
 _parseRuleTree = (obj, parents, rules, options) ->
+	log.warn "UNSCRAPED: #{JSON.stringify obj}"
 	[obj, data] = _scrapeData obj, options
+	log.warn "SCRAPED: #{JSON.stringify parents} => #{if obj then obj else "NULLLLLLLLLLL"} / #{JSON.stringify data}"
 	unless obj
+		log.error  {ranges : _cloneArray(parents), data : data}
 		return rules.push {ranges : _cloneArray(parents), data : data}
 	if typeof obj is 'object'
 		if Util.isArray obj
@@ -62,32 +67,18 @@ _parseRuleTree = (obj, parents, rules, options) ->
 			return
 		else
 			for name,child of obj
+				log.info "OBJECT: #{name}", child
 				_parseRuleTree(child, _cloneArray(parents, name), rules, options)
-			if data
-				return rules.push {ranges : _cloneArray(parents, name), data : data}
+				if data
+					rules.push {ranges : _cloneArray(parents), data : data}
 	else
 		return rules.push {ranges : _cloneArray(parents, obj), data : data}
 	return rules
 
 
-Rule.parseRuleTree = (obj, options={}) ->
-	options.terminal or= true
-	andRules = _parseRuleTree(obj, [], [], options)
-	rules = andRules.map (andRule) -> [
-		'and',
-		andRule.ranges.map (ranges) -> ['or', ranges.split(/\s*,\s*/)]
-		andRule.data
-	]
-	rules.map (andRule) ->
-		andRule[1] = andRule[1].map (orRule) ->
-			if orRule[1].length > 1
-				Rule.makeRule.apply(Rule, orRule)
-			else
-				# console.log orRule[1][0]
-				Range.parseRange(orRule[1][0])
-		Rule.makeRule.apply(Rule, andRule)
-
 ###
+'*':
+	foo: 42
 '2015-01-01 - 2015-12-31':
 	'Mo-Fr':
 		08:00 - 12:00
@@ -96,9 +87,26 @@ Rule.parseRuleTree = (obj, options={}) ->
 		08:00 - 10:00
 ==>
 [
-	['and', '2015-01-01 - 2015-12-31,Mo-Fr,08:00 - 12:00']
-	['and', '2015-01-01 - 2015-12-31,Mo-Fr,14:00 - 20:00']
-	['and', '2015-01-01 - 2015-12-31,Sa,08:00 - 10:00']
+	['and', '*', {foo: 42}]
+	['and', '2015-01-01 - 2015-12-31,Mo-Fr,08:00 - 12:00', true]
+	['and', '2015-01-01 - 2015-12-31,Mo-Fr,14:00 - 20:00', true]
+	['and', '2015-01-01 - 2015-12-31,Sa,08:00 - 10:00', true]
 ]
 
 ###
+Rule.parseRuleTree = (obj, options={}) ->
+	options.terminal or= true
+	andRules = _parseRuleTree(obj, [], [], options)
+	rules = andRules.map (andRule) -> [
+		'and',
+		andRule.ranges.map (ranges) -> ['or', ranges.split(/\s*,\s*/)]
+		andRule.data
+	]
+	return rules if options.parseOnly
+	rules.map (andRule) ->
+		andRule[1] = andRule[1].map (orRule) ->
+			# console.log orRule
+			Rule.makeRule.apply(Rule, orRule)
+		andRule = Rule.makeRule.apply(Rule, andRule)
+		andRule
+

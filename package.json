@@ -17,9 +17,9 @@
   },
   "homepage": "https://gitlab.com/kba/now#README",
   "dependencies": {
-    "easylog": "0.0.6",
+    "deep-extend": "^0.4.1",
+    "easylog": "0.0.9",
     "js-yaml": "^3.5.2",
-    "lodash": "^4.0.0",
     "moment": "^2.11.1",
     "moment-range": "^2.1.0"
   },

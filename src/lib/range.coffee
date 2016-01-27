@@ -24,7 +24,11 @@ Range.matchString = (range) ->
 				break
 	return matchCache[range]
 
-Range.matchStrings = (ranges) -> ranges.split(/\s*,\s*/).map Range.matchString
+Range.matchStrings = (ranges) ->
+	return unless typeof ranges is 'string'
+	for range in ranges.split(/\s*,\s*/)
+		type = Range.matchString(range)
+		return type if type
 
 Range.parseRange = (range) ->
 	range = range.toLowerCase().trim()
@@ -34,6 +38,8 @@ Range.parseRange = (range) ->
 		parseCache[range] = Range[type].parse(range)
 	return parseCache[range]
 
-Range.parseRanges = (ranges) -> ranges.split(/\s*,\s*/).map Range.parseRange
+Range.parseRanges = (ranges) ->
+	return unless typeof ranges is 'string'
+	ranges.split(/\s*,\s*/).map Range.parseRange
 
 Range.parseDate = (date) ->
