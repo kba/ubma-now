@@ -1,15 +1,14 @@
 BaseRange = require './base'
 Moment = require 'moment'
 MomentRange = require 'moment-range'
+FormatUtils = require '../utils'
 
 DATE_REPEATS = [ '-','daily','weekly','bi-weekly','monthly','yearly' ]
-
-DATE_REGEX = /\d{4}-\d{2}-\d{2}/
 
 DATE_RANGE_REGEX = ///
 	^
 	(
-		#{DATE_REGEX.source}
+		#{FormatUtils.DATE_REGEX.source}
 	)
 	(?:
 		\s+
@@ -19,7 +18,7 @@ DATE_RANGE_REGEX = ///
 		(?:
 			\s+
 			(
-				#{DATE_REGEX.source}
+				#{FormatUtils.DATE_REGEX.source}
 			)
 		)?
 	)?

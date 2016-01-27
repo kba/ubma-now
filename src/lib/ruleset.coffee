@@ -1,7 +1,6 @@
+Range = require './range'
+Rule = require './rule'
+
 module.exports = class Ruleset
 
-	constructor : (@timeRules) ->
-
-	onDate : (date) ->
-
-	onDateTime : (dateTime) ->
+	constructor : (@name, @timeRules) ->

@@ -83,7 +83,7 @@ Rule.parseRuleTree = (obj, options={}) ->
 			if orRule[1].length > 1
 				Rule.makeRule.apply(Rule, orRule)
 			else
-				console.log orRule[1][0]
+				# console.log orRule[1][0]
 				Range.parseRange(orRule[1][0])
 		Rule.makeRule.apply(Rule, andRule)
 

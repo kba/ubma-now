@@ -1,18 +1,18 @@
 BaseRange = require './base'
 Moment = require 'moment'
 MomentRange = require 'moment-range'
+FormatUtils = require '../utils'
 
 log = require('easylog')(module)
 
-TIME_REGEX = /\d{1,2}:\d{2}/
 TIME_RANGE_REGEX = ///
 	^
 	(
-		#{TIME_REGEX.source}
+		#{FormatUtils.TIME_REGEX.source}
 	)
 	\s*-\s*
 	(
-		#{TIME_REGEX.source}
+		#{FormatUtils.TIME_REGEX.source}
 	)
 	$
 ///
