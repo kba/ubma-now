@@ -22,7 +22,7 @@ Test 'tree', (t) ->
 	t.equals rules.length, 4, 'all rules were parsed'
 	t.equals rules.filter((r)->r.data).length, 4, 'all rules have data'
 	ruleset = new RuleSet('a3', rules)
-	ruleset.apply(Moment())
+	ruleset.applyDateTime(Moment())
 	# DUMP rules
 	# DUMP rules[0].contains(Moment('2015-11-09T09:00Z'))
 	# DUMP rules[0].toString()

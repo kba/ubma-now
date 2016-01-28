@@ -54,11 +54,8 @@ _scrapeData = (obj, options) ->
 			return [null, obj]
 
 _parseRuleTree = (obj, parents, rules, options) ->
-	log.warn "UNSCRAPED: #{JSON.stringify obj}"
 	[obj, data] = _scrapeData obj, options
-	log.warn "SCRAPED: #{JSON.stringify parents} => #{if obj then obj else "NULLLLLLLLLLL"} / #{JSON.stringify data}"
 	unless obj
-		log.error  {ranges : _cloneArray(parents), data : data}
 		return rules.push {ranges : _cloneArray(parents), data : data}
 	if typeof obj is 'object'
 		if Util.isArray obj
@@ -67,7 +64,7 @@ _parseRuleTree = (obj, parents, rules, options) ->
 			return
 		else
 			for name,child of obj
-				log.info "OBJECT: #{name}", child
+				log.debug "OBJECT: #{name}", child
 				_parseRuleTree(child, _cloneArray(parents, name), rules, options)
 				if data
 					rules.push {ranges : _cloneArray(parents), data : data}
@@ -109,4 +106,3 @@ Rule.parseRuleTree = (obj, options={}) ->
 			Rule.makeRule.apply(Rule, orRule)
 		andRule = Rule.makeRule.apply(Rule, andRule)
 		andRule
-

@@ -6,7 +6,12 @@ module.exports = class Ruleset
 
 	constructor : (@name, @rules) ->
 
-	apply: (date) ->
+	@fromRuleTree : (name, tree, options) ->
+		options or= {}
+		options.terminal or= open:true
+		return new Ruleset(name, Rule.parseRuleTree(tree, options))
+
+	applyDateTime: (date) ->
 		ret = {}
 		dataList = @rules.filter(
 			(rule) -> rule.containsDateTime(date)

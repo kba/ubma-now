@@ -42,4 +42,4 @@ Range.parseRanges = (ranges) ->
 	return unless typeof ranges is 'string'
 	ranges.split(/\s*,\s*/).map Range.parseRange
 
-Range.parseDate = (date) ->
+Range.parseDate = Range.Date.parseDate
