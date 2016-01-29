@@ -12,7 +12,7 @@ module.exports = class BaseRuleset
 				ret = {
 					matchedRules : []
 					data : {}
-					orig : @orig
+					# orig : @orig
 				}
 				dataList = @rules.map (rule) ->
 					if rule["contains#{type}"].apply(rule, [date])

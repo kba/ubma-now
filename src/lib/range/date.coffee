@@ -28,6 +28,7 @@ DATE_RANGE_REGEX = ///
 
 module.exports = class DateRange extends BaseRange
 	constructor : (from, to, @repeat) ->
+		to or= Moment("2099", "YYYY")
 		@inheritMomentRange(from, to, ['contains', 'toString'])
 		@repeat or= 'daily'
 	toString : ->

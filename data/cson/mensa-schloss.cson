@@ -1,0 +1,13 @@
+"Mo-Do":
+	"08:00 - 15:00": open: true
+	"11:30 - 14:15":
+		mittagstisch:true
+"Fr":
+	"08:00 - 14:30": open: true
+	"11:30 - 14:00":
+		mittagstisch:true
+"Mo-Fr":
+	"08:00 - 10:00":
+		fruehstuck: true
+"2016-03-04":
+	menue_1: "Fisch!"

@@ -1,11 +1,11 @@
 Test = require 'tape'
 Moment = require 'moment'
-
+FormatUtils = require '../lib/utils'
 Range  = require '../lib/range'
 
 testRange = (t, type, yesno, range, contained) ->
 	parseRangeFn = Range[type].parse
-	parseFn = Range[type]["parse#{type}"]
+	parseFn = FormatUtils["parse#{type}"]
 	_contained = if parseFn then parseFn.call(Range[type], contained) else contained
 	_range = parseRangeFn.call(Range[type], range)
 	t[yesno].call t, _range.containsDateTime(_contained),
@@ -25,19 +25,19 @@ Test 'parseWeekday', (t) ->
 Test 'parseDate', (t) ->
 	t.toStringEquals = (a,b,msg) ->
 		@equals(a.toString(), b.toString(), msg)
-	t.ok Range.Date.parseDate('2015-01-01') instanceof Moment, 'parseDate -> Moment'
+	t.ok FormatUtils.parseDate('2015-01-01') instanceof Moment, 'parseDate -> Moment'
 	t.equals Range.Date.parse('2015-01-01').toString(), '2015-01-01', 'toString'
 	t.equals Range.Date.parse('2015-01-01 daily 2015-01-10').toString(), '2015-01-01 daily 2015-01-10', 'toString'
-	t.toStringEquals Range.Date.parseDate('2015-01-01'), Moment('2015-01-01')
-	t.toStringEquals Range.Date.parseDate(Moment('2015-01-01')), Moment('2015-01-01')
+	t.toStringEquals FormatUtils.parseDate('2015-01-01'), Moment('2015-01-01')
+	t.toStringEquals FormatUtils.parseDate(Moment('2015-01-01')), Moment('2015-01-01')
 	t.end()
 
 Test 'parseTime', (t) ->
 	t.toStringEquals = (a,b,msg) ->
 		@equals(a.toString(), b.toString(), msg)
-	t.ok Range.Time.parseTime('08:10') instanceof Moment, 'parseTime -> Moment'
+	t.ok FormatUtils.parseTime('08:10') instanceof Moment, 'parseTime -> Moment'
 	t.equals Range.Time.parse('08:01-08:03').toString(), '08:01 - 08:03', 'toString'
-	t.toStringEquals Range.Time.parseTime('08:10'), Moment('08:10', 'H:m')
+	t.toStringEquals FormatUtils.parseTime('08:10'), Moment('08:10', 'H:m')
 	t.end()
 
 Test 'catchall ranges', (t) ->
@@ -84,7 +84,7 @@ Test.skip 'iterate 1', (t) ->
 
 Test 'iterate time', (t) ->
 	timeRange = Range.Time.parse('08:00-16:00')
-	onDate = timeRange.onDate(Range.Date.parseDate('2015-01-01'))
+	onDate = timeRange.onDate(FormatUtils.parseDate('2015-01-01'))
 	onDate.by 'hours', (date) ->
 		console.log date.toString()
 	# max = 5
