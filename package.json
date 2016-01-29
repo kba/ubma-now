@@ -4,7 +4,8 @@
   "description": "Opening Hours calculcator",
   "main": "lib/index.js",
   "scripts": {
-    "test": "coffee src/test/test-*"
+    "test": "coffee src/test/test-*",
+    "start": "supervisor -w src/,data/**/*.cson src/lib/server.coffee"
   },
   "repository": {
     "type": "git",
@@ -19,13 +20,14 @@
   "dependencies": {
     "cson": "^3.0.2",
     "deep-extend": "^0.4.1",
-    "easylog": "0.0.9",
+    "easylog": "0.0.10",
     "express": "^4.13.4",
     "find-up": "^1.1.0",
     "jade": "^1.11.0",
     "js-yaml": "^3.5.2",
     "moment": "^2.11.1",
-    "moment-range": "^2.1.0"
+    "moment-range": "^2.1.0",
+    "supervisor": "^0.9.1"
   },
   "devDependencies": {
     "tape": "^4.4.0"

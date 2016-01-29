@@ -1,35 +1,35 @@
 Express = require 'express'
 FindUp = require 'find-up'
 Path = require 'path'
-Range  = require './range'
-FormatUtils = require './utils'
 Fs = require 'fs'
 CSON = require 'cson'
-RuleSet  = require './ruleset'
 
-PKGDIR = Path.dirname(FindUp('package.json', cwd: __dirname))
+FormatUtils = require './utils'
+RulesetDB = require './ruleset-db'
+
+log = require('easylog')(module)
+
+PKGDIR = Path.dirname(FindUp('package.json', cwd : __dirname))
 DATADIR = Path.join(PKGDIR, 'data', 'cson')
-DB = {}
-console.log PKGDIR
+
+DB = new RulesetDB()
+
 Fs.readdirSync(DATADIR).map (cson) ->
 	name = cson.replace('.cson', '')
-	cson = CSON.load(Path.join(DATADIR, cson))
-	DB[name] = RuleSet.fromRuleTree(name, cson)
-
+	ruleset = DB.put('OpeningHours', name, CSON.load(Path.join(DATADIR, cson)))
 
 app = Express()
 
 app.get '/', (req, res) -> res.render 'hello'
-app.get '/dateTime', (req, res) ->
-	ret = {}
-	Object.keys(DB).map (name) ->
-		moment = Range.parseDate(req.query.q)
-		data = DB[name].applyDateTime moment
-		if data
-			ret[name] = data
-	res.send ret
+
+FormatUtils.Type.map (type) ->
+	endpoint = type[0].toLowerCase() + type.substring(1)
+	app.get "/api/#{endpoint}", (req, res) ->
+		log.debug "#{endpoint}: Searching matching rulesets for #{req.query.q}"
+		res.send DB.find type, req.query.q
 
 app.set('views', Path.join(PKGDIR, 'templates'))
 app.set('view engine', 'jade')
+app.set('json spaces', 2)
 app.use(Express.static(Path.join(PKGDIR, 'public')))
 app.listen(3000)

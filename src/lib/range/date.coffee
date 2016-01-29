@@ -1,4 +1,4 @@
-BaseRange = require './base'
+BaseRange = require './base-range'
 Moment = require 'moment'
 MomentRange = require 'moment-range'
 FormatUtils = require '../utils'
@@ -8,7 +8,7 @@ DATE_REPEATS = [ '-','daily','weekly','bi-weekly','monthly','yearly' ]
 DATE_RANGE_REGEX = ///
 	^
 	(
-		#{FormatUtils.DATE_REGEX.source}
+		#{FormatUtils.Regex.Date.source}
 	)
 	(?:
 		\s+
@@ -18,7 +18,7 @@ DATE_RANGE_REGEX = ///
 		(?:
 			\s+
 			(
-				#{FormatUtils.DATE_REGEX.source}
+				#{FormatUtils.Regex.Date.source}
 			)
 		)?
 	)?
@@ -36,7 +36,7 @@ module.exports = class DateRange extends BaseRange
 		return [from,to].join(" #{@repeat} ")
 	containsTime : -> true
 	containsDate : (date) ->
-		date = DateRange.parseDate(date)
+		date = FormatUtils.parseDate(date)
 		return unless @_range.contains(date)
 		return true if @repeat is 'daily'
 		daysSince = date.diff(@start, 'days')
@@ -72,20 +72,15 @@ module.exports = class DateRange extends BaseRange
 			#     else throw new Error("Unsupported iteration: #{@repeat}")
 			#     start = Moment(cur)
 			break unless @contains(cur)
-	@parseDate : (date) ->
-		if typeof date is 'string'
-			return Moment(date, 'YYYY-MM-DD')
-		if date instanceof Moment
-			return date
 	@matchString : (str) ->
 		DATE_RANGE_REGEX.test(str)
 	@parse : (range) ->
 		[from, repeat, to] = range.match(DATE_RANGE_REGEX).slice(1)
-		from = DateRange.parseDate(from).hour(0).minute(0).second(0)
+		from = FormatUtils.parseDate(from).hour(0).minute(0).second(0)
 		unless repeat
 			to = Moment(from).hour(23).minute(59).second(59)
 		else if repeat == '-'
 			repeat = 'daily'
 		if to
-			to = DateRange.parseDate to
+			to = FormatUtils.parseDate to
 		return new DateRange(from, to, repeat)

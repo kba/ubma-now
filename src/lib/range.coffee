@@ -26,7 +26,7 @@ Range.matchString = (range) ->
 
 Range.matchStrings = (ranges) ->
 	return unless typeof ranges is 'string'
-	for range in ranges.split(/\s*,\s*/)
+	for range in ranges.trim().split(/\s*,\s*/)
 		type = Range.matchString(range)
 		return type if type
 
@@ -41,5 +41,3 @@ Range.parseRange = (range) ->
 Range.parseRanges = (ranges) ->
 	return unless typeof ranges is 'string'
 	ranges.split(/\s*,\s*/).map Range.parseRange
-
-Range.parseDate = Range.Date.parseDate

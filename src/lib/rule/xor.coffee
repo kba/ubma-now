@@ -1,4 +1,4 @@
-BaseRule = require './base'
+BaseRule = require './base-rule'
 
 module.exports = class XorRule extends BaseRule
 

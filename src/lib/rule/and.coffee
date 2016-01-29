@@ -1,4 +1,4 @@
-BaseRule = require './base'
+BaseRule = require './base-rule'
 
 log = require('easylog')(module)
 

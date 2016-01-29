@@ -10,6 +10,10 @@ for locale in ['en', 'de']
 
 DEFAULT_NAMED_DAYS = 'holidays-de-bw'
 NAMED_DAYS = {
+	"ub-mannheim" : {
+		semester : "2016-02-15 - 2016-20-03,2016-04-01 - 2016-06-03"
+		examination : "2016-06-06 - 2016-06-18"
+	}
 	"#{DEFAULT_NAMED_DAYS}" :
 		'Heiligabend' : '2000-12-24 yearly'
 		'1. Weihnachtsfeiertag' : '2000-12-25 yearly'

@@ -1,5 +1,5 @@
 Moment = require 'moment'
-BaseRange = require './base'
+BaseRange = require './base-range'
 CONFIG = require '../config'
 
 module.exports = class WeekdayRange extends BaseRange
