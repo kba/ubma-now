@@ -1,103 +1,31 @@
-doctype html
-html(lang='en')
-	head
-		meta(charset='utf-8')
-		meta(http-equiv='X-UA-Compatible', content='IE=edge')
-		meta(name='viewport', content='width=device-width, initial-scale=1')
-		link(rel='icon', href='/favicon.ico')
-		title Opening Hours
-		// Bootstrap core CSS
-		link(href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css', rel='stylesheet')
-		link(href='http://getbootstrap.com/examples/sticky-footer-navbar/sticky-footer-navbar.css', rel='stylesheet')
-		link(href='https://raw.githubusercontent.com/Eonasdan/bootstrap-datetimepicker/master/build/css/bootstrap-datetimepicker.css', rel='stylesheet')
-		style.
-			.open { background: green; }
-		
-		// Bootstrap core JavaScript
-		// ==================================================
-		// Placed at the end of the document so the pages load faster
-		script(src='//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js')
-		script(src='//cdnjs.cloudflare.com/ajax/libs/superagent/1.2.0/superagent.js')
-		script(src='//cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.1/moment-with-locales.js')
-		script(src='//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/js/bootstrap.js')
-		script(src='//cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js')
-	body
-		// Fixed navbar
-		.navbar.navbar-default.navbar-fixed-top(role='navigation')
-			.container
-				.navbar-header
-					button.navbar-toggle(type='button', data-toggle='collapse', data-target='.navbar-collapse')
-						span.sr-only Toggle navigation
-						span.icon-bar
-						span.icon-bar
-						span.icon-bar
-					a.navbar-brand(href='#') Project name
-				.collapse.navbar-collapse
-					ul.nav.navbar-nav
-						li.active
-							a(href='#') Home
-						li
-							a(href='#about') About
-						li
-							a(href='#contact') Contact
-						li.dropdown
-							a.dropdown-toggle(href='#', data-toggle='dropdown')
-								| Dropdown 
-								span.caret
-							ul.dropdown-menu(role='menu')
-								li
-									a(href='#') Action
-								li
-									a(href='#') Another action
-								li
-									a(href='#') Something else here
-								li.divider
-								li.dropdown-header Nav header
-								li
-									a(href='#') Separated link
-								li
-									a(href='#') One more separated link
-				// /.nav-collapse
-		// Begin page content
-		.container
-				.form-group
-					.row
-						.col-md-5
-							.row
-								#datetimepicker
-						.col-md-7
-							#resp
-				script(type='text/javascript').
-					$(function () {
-						$('#datetimepicker').datetimepicker({
-							inline: true,
-							sideBySide: true,
-							locale: 'de',
-							widgetPositioning: {
-								horizontal: 'right',
-								vertical: 'top'
-							}
-						});
-						$('#datetimepicker').on('dp.change', function(e) {
-							superagent
-								.get('/api/dateTime?q=' + e.date.format("YYYY-MM-DD HH:mm"))
-								.end(function(err, res) {
-									var json = JSON.parse(res.text);
-									var parent = $("#resp");
-									parent.empty();
-									for (key in json) {
-										var el = $("<div>");
-										console.log(json[key].data.open);
-										if (json[key].data.open) {
-											el.addClass('open');
-										}
-										el.append($("<h1>").text(key));
-										el.append($("<pre>").text(JSON.stringify(json[key].data)));
-										parent.append(el);
-									}
-								});
+extends ./layout.jade
+
+block content
+	.container
+			.form-group
+				.row
+					.col-md-5
+						.row
+							#datetimepicker
+					.col-md-7
+						#resp
+			script(src='/js/Place.js')
+			script(src='/js/PlaceView.js')
+			script(src='/js/PlaceCollection.js')
+			script(type='text/javascript').
+				$(function () {
+					$('#datetimepicker').datetimepicker({
+						inline: true,
+						sideBySide: true,
+						locale: 'de',
+					});
+					$('#datetimepicker').on('dp.change', function(e) {
+						var container = $("#resp").empty();
+						var coll = new PlaceCollection('dateTime', e.date) 
+						coll.fetch(function() {
+							coll.places.map(function(place) {
+								container.append(new PlaceView(place).render());
+							});
 						});
 					});
-		.footer
-			.container
-				p.text-muted Place sticky footer content here.
+				});

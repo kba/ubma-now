@@ -5,7 +5,7 @@
   "main": "lib/index.js",
   "scripts": {
     "test": "coffee src/test/test-*",
-    "start": "supervisor -w src/,data/**/*.cson src/lib/server.coffee"
+    "start": "supervisor -w src/,data,templates -e coffee,cson,jade,json -x make start"
   },
   "repository": {
     "type": "git",

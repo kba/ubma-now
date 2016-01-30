@@ -9,7 +9,7 @@ testRange = (t, type, yesno, range, contained) ->
 	_contained = if parseFn then parseFn.call(Range[type], contained) else contained
 	_range = parseRangeFn.call(Range[type], range)
 	t[yesno].call t, _range.containsDateTime(_contained),
-		"#{type}Range: '#{contained}' #{if yesno is 'notOk' then 'not in' else 'in'} '#{range}'" 
+		"#{type}Range: '#{contained}' #{if yesno is 'notOk' then 'not in' else 'in'} '#{range}'"
 	return _range
 
 Test 'parseWeekday', (t) ->
@@ -27,7 +27,8 @@ Test 'parseDate', (t) ->
 		@equals(a.toString(), b.toString(), msg)
 	t.ok FormatUtils.parseDate('2015-01-01') instanceof Moment, 'parseDate -> Moment'
 	t.equals Range.Date.parse('2015-01-01').toString(), '2015-01-01', 'toString'
-	t.equals Range.Date.parse('2015-01-01 daily 2015-01-10').toString(), '2015-01-01 daily 2015-01-10', 'toString'
+	t.equals Range.Date.parse('2015-01-01 daily 2015-01-10').toString(),
+		'2015-01-01 daily 2015-01-10', 'toString'
 	t.toStringEquals FormatUtils.parseDate('2015-01-01'), Moment('2015-01-01')
 	t.toStringEquals FormatUtils.parseDate(Moment('2015-01-01')), Moment('2015-01-01')
 	t.end()
@@ -78,7 +79,7 @@ Test.skip 'iterate 1', (t) ->
 	range = testRange t, 'Date', 'ok', '2000-01-01 weekly 2012-02-23', '2005-01-01'
 	max = 5
 	i = 0
-	range.iterate {by:'month'}, (date) ->
+	range.iterate {by : 'month'}, (date) ->
 		console.log date.toString()
 	t.end()
 
@@ -89,6 +90,6 @@ Test 'iterate time', (t) ->
 		console.log date.toString()
 	# max = 5
 	# i = 0
-	# range.iterate {by:'month'}, (date) ->
+	# range.iterate {by :'month'}, (date) ->
 	#     console.log date.toString()
 	t.end()

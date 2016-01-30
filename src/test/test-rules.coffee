@@ -1,6 +1,6 @@
 Test = require 'tape'
 Moment = require 'moment'
-DUMP = (arg) -> console.log require('util').inspect(arg, {colors:true, depth: 3})
+DUMP = (arg) -> console.log require('util').inspect(arg, {colors : true, depth : 3})
 
 Rule  = require '../lib/rule'
 Range = require '../lib/range'

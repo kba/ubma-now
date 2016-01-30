@@ -32,7 +32,6 @@ module.exports = class BaseRule
 
 	filterRanges : (fn) ->
 		ret = []
-		# console.log @ranges
 		@ranges.map (range) ->
 			if fn(range)
 				ret.push range
