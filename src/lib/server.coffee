@@ -3,6 +3,7 @@ FindUp = require 'find-up'
 Path = require 'path'
 Fs = require 'fs'
 CSON = require 'cson'
+Cors = require 'cors'
 
 FormatUtils = require './utils'
 RulesetDB = require './ruleset-db'
@@ -19,6 +20,7 @@ Fs.readdirSync(DATADIR).map (cson) ->
 	ruleset = DB.put('OpeningHours', name, CSON.load(Path.join(DATADIR, cson)))
 
 app = Express()
+app.use(Cors())
 
 app.get '/', (req, res) -> res.render 'hello'
 

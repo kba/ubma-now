@@ -29,3 +29,13 @@ module.exports = class BaseRule
 		).join(" #{op} ")
 		ret += " => #{JSON.stringify @data}" if @data
 		return ret
+
+	filterRanges : (fn) ->
+		ret = []
+		# console.log @ranges
+		@ranges.map (range) ->
+			if fn(range)
+				ret.push range
+			if range.filterRanges
+				ret.push v for v in range.filterRanges(fn)
+		return ret

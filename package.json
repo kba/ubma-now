@@ -18,6 +18,7 @@
   },
   "homepage": "https://gitlab.com/kba/now#README",
   "dependencies": {
+    "cors": "^2.7.1",
     "cson": "^3.0.2",
     "deep-extend": "^0.4.1",
     "easylog": "0.0.10",
