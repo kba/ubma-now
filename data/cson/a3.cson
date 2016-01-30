@@ -1,3 +1,8 @@
+"name": 'Bibliotheksbereich A3'
+"@id": 'https://www.bib.uni-mannheim.de/629.html'
+"_template": "bb"
+"_id_ampel": "a3"
+"_id_3d": "a3"
 "0001-01-01 - ":
-	"08:00 - 23:00"
+	"08:00 - 23:00": open: true
 	# 'Sa-So': "08:00 - 00:00"

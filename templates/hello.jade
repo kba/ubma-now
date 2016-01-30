@@ -8,24 +8,24 @@ block content
 						.row
 							#datetimepicker
 					.col-md-7
-						#resp
-			script(src='/js/Place.js')
-			script(src='/js/PlaceView.js')
-			script(src='/js/PlaceCollection.js')
-			script(type='text/javascript').
-				$(function () {
-					$('#datetimepicker').datetimepicker({
-						inline: true,
-						sideBySide: true,
-						locale: 'de',
-					});
-					$('#datetimepicker').on('dp.change', function(e) {
-						var container = $("#resp").empty();
-						var coll = new PlaceCollection('dateTime', e.date) 
-						coll.fetch(function() {
-							coll.places.map(function(place) {
-								container.append(new PlaceView(place).render());
-							});
-						});
-					});
-				});
+						.panel-group#accordion(role="tablist",aria-multiselectable="true")
+							#resp
+	script
+		:coffee-script
+			$ ->
+				pickerElem = $('#datetimepicker')
+				pickerElem.datetimepicker(
+					inline: true
+					sideBySide: true
+					defaultDate : new Date()
+					locale: 'de'
+				)
+				picker = $('#datetimepicker').data('DateTimePicker')
+				updateList = ->
+					container = $("#resp").empty()
+					coll = new PlaceCollection('dateTime', picker.date())
+					coll.fetch (err) ->
+						coll.places.map (place) ->
+							container.append new PlaceView(place).render()
+				pickerElem.on 'dp.change', updateList
+				$('#datetimepicker').trigger 'dp.change'

@@ -32,6 +32,7 @@ FormatUtils.Type.map (type) ->
 
 app.set('views', Path.join(PKGDIR, 'templates'))
 app.set('view engine', 'jade')
+app.locals.pretty = true
 app.set('json spaces', 2)
 app.use(Express.static(Path.join(PKGDIR, 'public')))
 app.listen(3000)

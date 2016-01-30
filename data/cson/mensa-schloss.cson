@@ -1,3 +1,4 @@
+_template: 'mensa'
 geo: ['42', '23']
 "Mo-Do":
 	"08:00 - 15:00": open: true
