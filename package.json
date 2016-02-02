@@ -19,15 +19,11 @@
   "homepage": "https://gitlab.com/kba/now#README",
   "dependencies": {
     "cors": "^2.7.1",
-    "cson": "^3.0.2",
-    "deep-extend": "^0.4.1",
     "easylog": "0.0.10",
     "express": "^4.13.4",
     "find-up": "^1.1.0",
     "jade": "^1.11.0",
-    "js-yaml": "^3.5.2",
-    "moment": "^2.11.1",
-    "moment-range": "^2.1.0",
+    "moment-rule": "0.0.1",
     "supervisor": "^0.9.1"
   },
   "devDependencies": {

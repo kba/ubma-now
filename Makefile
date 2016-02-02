@@ -17,9 +17,9 @@ lib/%.js : src/lib/%.coffee
 	@$(MKDIR) $(@D)
 	$(COFFEE) -o "$(@D)" "$<"
 
-test/%.js : src/test/%.coffee
-	@$(MKDIR) $(@D)
-	$(COFFEE) -o "$(@D)" "$<"
+# test/%.js : src/test/%.coffee
+#   @$(MKDIR) $(@D)
+#   $(COFFEE) -o "$(@D)" "$<"
 
 public/js/%.js : src/public/js/%.coffee
 	@$(MKDIR) $(@D)

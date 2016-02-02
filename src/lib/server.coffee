@@ -5,12 +5,11 @@ Fs = require 'fs'
 CSON = require 'cson'
 Cors = require 'cors'
 
-FormatUtils = require './utils'
-RulesetDB = require './ruleset-db'
+{FormatUtils, RulesetDB} = require 'moment-rule'
 
 log = require('easylog')(module)
 
-PKGDIR = Path.dirname(FindUp('package.json', cwd : __dirname))
+PKGDIR = Path.dirname(FindUp.sync('package.json', cwd : __dirname))
 DATADIR = Path.join(PKGDIR, 'data', 'cson')
 
 DB = new RulesetDB()
